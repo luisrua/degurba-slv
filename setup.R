@@ -53,6 +53,7 @@ library2("sf")
 library2("tidyterra")
 library2("conflicted")
 library2("raster")
+library2("exactextractr")
 # install.packages("sfdct")
 # library2("sfdct")
 
