@@ -31,6 +31,7 @@ ghs_pop_2005 <- rast(paste0(folder, "layers/ghs/GHS_POP_E2005_GLOBE_R2023A_54009
 ghs_pop_2010 <- rast(paste0(folder, "layers/ghs/GHS_POP_E2010_GLOBE_R2023A_54009_100_V1_0_R8_C10.tif"))
 ghs_pop_2015 <- rast(paste0(folder, "layers/ghs/GHS_POP_E2015_GLOBE_R2023A_54009_100_V1_0_R8_C10.tif"))
 ghs_pop_2020 <- rast(paste0(folder, "layers/ghs/GHS_POP_E2020_GLOBE_R2023A_54009_100_V1_0_R8_C10.tif"))
+ghs_pop_2025 <- rast(paste0(folder, "layers/ghs/GHS_POP_E2025_GLOBE_R2023A_54009_100_V1_0_R8_C10.tif"))
 
 # Projection to Mollewide
 ab_mol <- project(ab, crs(ghs_pop_2005))
@@ -47,7 +48,8 @@ ab_mol
 ghs_list <- list("2005" = ghs_pop_2005,
                  "2010" = ghs_pop_2010,
                  "2015" = ghs_pop_2015,
-                 "2020" = ghs_pop_2020
+                 "2020" = ghs_pop_2020,
+                 "2025" = ghs_pop_2025
 )
 
 # Empty list for the results
@@ -144,7 +146,7 @@ master_degurba_wide <- master_degurba_table %>%
 
 # 2. Export the clean data frame safely to CSV
 write.csv(master_degurba_wide, 
-          paste0(folder, "results/El_Salvador_DEGURBA_Wide_2005_2020.csv"), 
+          paste0(folder, "results/El_Salvador_DEGURBA_Wide_2005_2025.csv"), 
           row.names = FALSE)
 
 
@@ -229,6 +231,18 @@ degurba_time_map <- leaflet(map_data_wgs84) %>%
                     "<b>2020 Total Pop:</b> ", format(Pop_Total_2020, big.mark=","), "<br>",
                     "<b>2020 Urban Pop:</b> ", format(Pop_Urban_2020, big.mark=","), " (", Pct_Urban_2020, "%)")
   ) %>%
+  # --- 2020 LAYER ---
+  addPolygons(
+    fillColor = ~pal_ur(Designation_2025),
+    fillOpacity = 0.7,
+    color = "#444444", weight = 1,
+    group = "Year: 2025",
+    label = ~District,
+    popup = ~paste0("<b>District:</b> ", District, "<br>",
+                    "<b>2020 Status:</b> ", Designation_2025, "<br>",
+                    "<b>2020 Total Pop:</b> ", format(Pop_Total_2025, big.mark=","), "<br>",
+                    "<b>2020 Urban Pop:</b> ", format(Pop_Urban_2025, big.mark=","), " (", Pct_Urban_2025, "%)")
+  ) %>%
   
   # Add the Legend
   addLegend(
@@ -241,7 +255,7 @@ degurba_time_map <- leaflet(map_data_wgs84) %>%
   
   # Add the Layer Control Menu (Radio Buttons for Years)
   addLayersControl(
-    baseGroups = c("Year: 2005", "Year: 2010", "Year: 2015", "Year: 2020"),
+    baseGroups = c("Year: 2005", "Year: 2010", "Year: 2015", "Year: 2020", "Year: 2025"),
     options = layersControlOptions(collapsed = FALSE)
   )
 
